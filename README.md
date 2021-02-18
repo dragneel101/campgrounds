@@ -1,2 +1,2 @@
 # campgrounds
-Dynamic Node JS based API 
+Dynamic Node JS based Website
