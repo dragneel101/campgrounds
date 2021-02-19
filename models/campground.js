@@ -1,9 +1,7 @@
-//required dependencies
 const mongoose = require('mongoose');
-const review = require('./review');
+const Review = require('./review')
 const Schema = mongoose.Schema;
 
-//Schema of database
 const CampgroundSchema = new Schema({
     title: String,
     image: String,
@@ -20,7 +18,7 @@ const CampgroundSchema = new Schema({
 
 CampgroundSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
-        await review.deleteMany({
+        await Review.deleteMany({
             _id: {
                 $in: doc.reviews
             }
@@ -28,5 +26,4 @@ CampgroundSchema.post('findOneAndDelete', async function (doc) {
     }
 })
 
-//export the model
 module.exports = mongoose.model('Campground', CampgroundSchema);
