@@ -1,0 +1,1 @@
+alert("Hello FROM THE PIUBLIC DIRECTORY")
