@@ -1,8 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
-
-
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -15,16 +13,14 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const helmet = require('helmet');
-
 const mongoSanitize = require('express-mongo-sanitize');
 const MongoStore = require('connect-mongo').default;
-
-
-
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
-const dbURL = 'mongodb://localhost:27017/yelp-camp'
+
+const dbURL = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp'
+
 mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -50,11 +46,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(mongoSanitize({
     replaceWith: '_'
 }))
+const secret = process.env.SECRET || '11thisshouldbeabettersecret!11'
 
 const store = MongoStore.create({
     mongoUrl: dbURL,
     touchAfter: 24 * 3600, // time period in seconds
-    secret: 'keyboard cat'
+    secret
 })
 
 store.on("error", function (e) {
@@ -63,7 +60,7 @@ store.on("error", function (e) {
 
 const sessionConfig = {
     name: 'session',
-    secret: 'keyboard cat',
+    secret,
     saveUninitialized: false, // don't create session until something stored
     resave: false, //don't save session if unmodified
     cookie: {
@@ -77,26 +74,6 @@ const sessionConfig = {
 }
 
 app.use(session(sessionConfig));
-
-// app.use(session({
-//     name: 'session',
-//     secret: 'keyboard cat',
-//     saveUninitialized: false, // don't create session until something stored
-//     resave: false, //don't save session if unmodified
-//     cookie: {
-//         httpOnly: true,
-//         // secure: true,
-//         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-//         maxAge: 1000 * 60 * 60 * 24 * 7
-//     },
-//     store: MongoStore.create({
-//         mongoUrl: dbURL,
-//         touchAfter: 24 * 3600, // time period in seconds
-//         secret: 'keyboard cat'
-
-//     })
-
-// }));
 app.use(flash());
 app.use(helmet());
 
