@@ -1,5 +1,5 @@
 {
-  "name": "yelpCamp",
+  "name": "yelpcamp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -13,9 +13,8 @@
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.11.0",
     "cloudinary": "^1.23.0",
-    "connect": "^3.7.0",
     "connect-flash": "^0.1.1",
-    "connect-mongo": "^4.1.0",
+    "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "ejs-mate": "^3.0.0",
