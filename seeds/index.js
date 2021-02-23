@@ -17,25 +17,25 @@ db.once("open", () => {
 });
 
 const creator = ["60327c750d20493716ef32a4", "60314175808171440e208375", "603111ccf46ee13c0ed83f13"]
-const coordinate = [
-    [45.00713, -111.60332],
-    [- 11.19310, -178.76434],
-    [-81.75813, -150.92889],
-    [0.15107, 111.31044],
-    [34.03897, 76.28145],
-    [38.36870, 91.04979],
-    [-36.97229, -69.32345],
-    [7.23921, 100.09621],
-    [59.91626, 137.56041],
-    [59.91626, 137.56041],
-    [68.91605, -88.06724],
-    [50.76260, 119.58011],
-    [34.47724, -119.88676],
-    [-32.55985, -54.87401],
-    [34.46447, 50.35492],
-    [-32.14727, 135.50057],
-    [50.16252, 68.28975],
-    [40.17510, 120.53729]]
+// const coordinate = [
+//     [45.00713, -111.60332],
+//     [- 11.19310, -178.76434],
+//     [-81.75813, -150.92889],
+//     [0.15107, 111.31044],
+//     [34.03897, 76.28145],
+//     [38.36870, 91.04979],
+//     [-36.97229, -69.32345],
+//     [7.23921, 100.09621],
+//     [59.91626, 137.56041],
+//     [59.91626, 137.56041],
+//     [68.91605, -88.06724],
+//     [50.76260, 119.58011],
+//     [34.47724, -119.88676],
+//     [-32.55985, -54.87401],
+//     [34.46447, 50.35492],
+//     [-32.14727, 135.50057],
+//     [50.16252, 68.28975],
+//     [40.17510, 120.53729]]
 
 
 const imagee = ["https://res.cloudinary.com/testserver/image/upload/v1613930125/YelpCamp/chris-schog-EnCaUE4QNOw-unsplash_shc1mb.jpg",
@@ -66,7 +66,7 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
     await Campground.deleteMany({});
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 200; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
@@ -86,7 +86,8 @@ const seedDB = async () => {
             price,
             geometry: {
                 type: "Point",
-                coordinates: coordinate[Math.floor(Math.random() * coordinate.length)].reverse()
+                coordinates: [cities[random1000].longitude,
+                cities[random1000].latitude]
             }
         })
         await camp.save();
