@@ -17,14 +17,15 @@ const User = require('./models/user');
 const helmet = require('helmet');
 
 const mongoSanitize = require('express-mongo-sanitize');
+const MongoStore = require('connect-mongo').default;
 
 
 
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
-
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+const dbURL = 'mongodb://localhost:27017/yelp-camp'
+mongoose.connect(dbURL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -50,20 +51,52 @@ app.use(mongoSanitize({
     replaceWith: '_'
 }))
 
+const store = MongoStore.create({
+    mongoUrl: dbURL,
+    touchAfter: 24 * 3600, // time period in seconds
+    secret: 'keyboard cat'
+})
+
+store.on("error", function (e) {
+    console.log("session store errors", e)
+})
+
 const sessionConfig = {
     name: 'session',
-    secret: 'thisshouldbeabettersecret!',
-    resave: false,
-    saveUninitialized: true,
+    secret: 'keyboard cat',
+    saveUninitialized: false, // don't create session until something stored
+    resave: false, //don't save session if unmodified
     cookie: {
         httpOnly: true,
         // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
-    }
+    },
+    store
+
 }
 
 app.use(session(sessionConfig));
+
+// app.use(session({
+//     name: 'session',
+//     secret: 'keyboard cat',
+//     saveUninitialized: false, // don't create session until something stored
+//     resave: false, //don't save session if unmodified
+//     cookie: {
+//         httpOnly: true,
+//         // secure: true,
+//         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+//         maxAge: 1000 * 60 * 60 * 24 * 7
+//     },
+//     store: MongoStore.create({
+//         mongoUrl: dbURL,
+//         touchAfter: 24 * 3600, // time period in seconds
+//         secret: 'keyboard cat'
+
+//     })
+
+// }));
 app.use(flash());
 app.use(helmet());
 
