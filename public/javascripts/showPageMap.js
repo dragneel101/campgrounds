@@ -1,21 +1,18 @@
 mapboxgl.accessToken = mapToken;
 const map = new mapboxgl.Map({
-    container: "map", // container ID
-    style: "mapbox://styles/mapbox/outdoors-v11", // style URL
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
     center: campground.geometry.coordinates, // starting position [lng, lat]
-    zoom: 9, // starting zoom
+    zoom: 10 // starting zoom
 });
-
-
-new mapboxgl.Marker({
-    color: "#3f65b0",
-    draggable: false
-}).setLngLat(campground.geometry.coordinates)
-    .addTo(map);
 
 new mapboxgl.Marker()
     .setLngLat(campground.geometry.coordinates)
-    .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(`<h8>${campground.title}</h8><p>${campground.location}</p> `))
-    .addTo(map);
+    .setPopup(
+        new mapboxgl.Popup({ offset: 25 })
+            .setHTML(
+                `<h3>${campground.title}</h3><p>${campground.location}</p>`
+            )
+    )
+    .addTo(map)
 
-console.log(marker.getPopup()); // return the popup instance
