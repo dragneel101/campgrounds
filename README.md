@@ -1,4 +1,4 @@
 # campgrounds
 Dynamic Node JS based Website
 
-https://rkhaitu-yelp.herokuapp.com/
+demo: https://rkhaitu-yelp.herokuapp.com/
